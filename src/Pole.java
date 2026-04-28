@@ -6,7 +6,7 @@ public class Pole {
     public Wall[][] getPole() {
         return pole;
     }
-    p
+    pj
 
     public void setPole(Wall[][] pole) {
         this.pole = pole;
