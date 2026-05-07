@@ -41,9 +41,7 @@ public class Pole {
         }
         return true;
     }
-    public void buildMaze(Random rnd){
-        pole[pole.length/2][pole[pole.length/2].length/2].setVisited(true);
-        boolean done = true;
+public void BuidlMazeDFS(Random rnd){
         Stack<int[]> stack = new Stack<>();
         int x = pole.length / 2;
         int y = pole[0].length / 2;
@@ -84,7 +82,27 @@ public class Pole {
         return list;
     }
     void removeWall(int x, int y, int nx, int ny) {
-        // TODO podle směru upravit stěny
+        if (nx == x - 1 && ny == y) {
+            Wall.drill(pole[x][y], 0);
+            Wall.drill(pole[nx][ny], 2);
+        } else if (nx == x + 1 && ny == y) {
+            Wall.drill(pole[x][y], 2);
+            Wall.drill(pole[nx][ny], 0);
+        } else if (nx == x && ny == y - 1) {
+            Wall.drill(pole[x][y], 3);
+            Wall.drill(pole[nx][ny], 1);
+        } else if (nx == x && ny == y + 1) {
+            Wall.drill(pole[x][y], 1);
+            Wall.drill(pole[nx][ny], 3);
+        }
     }
-
+    public int getRows() {
+        return pole.length;
+    }
+    public int getCols() {
+        return pole[0].length;
+    }
+    public Wall getCell(int row, int col) {
+        return pole[row][col];
+    }
 }
