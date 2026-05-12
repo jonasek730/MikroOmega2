@@ -10,7 +10,15 @@ public class Main {
         pole.printMaze();
 
         SwingUtilities.invokeLater(() -> {
+            JFrame frame = new JFrame("Bludiště");
 
+            Game panel = new Game();
+            frame.add(panel);
+            frame.pack();
+
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            frame.setLocationRelativeTo(null);
+            frame.setVisible(true);
         });
     }
 }
