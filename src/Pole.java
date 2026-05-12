@@ -41,36 +41,48 @@ public class Pole {
         }
         return true;
     }
-public void BuidlMazeDFS(Random rnd){
-        Stack<int[]> stack = new Stack<>();
-        int x = pole.length / 2;
-        int y = pole[0].length / 2;
+public void BuidlMazeDFS(Random rnd) {
+    Stack<int[]> stack = new Stack<>();
+    int x = pole.length / 2;
+    int y = pole[0].length / 2;
 
-        pole[x][y].setVisited(true);
-        stack.push(new int[]{x, y});
-        while (!stack.isEmpty()) {
+    pole[x][y].setVisited(true);
+    stack.push(new int[]{x, y});
+    while (!stack.isEmpty()) {
 
-            int[] current = stack.peek();
-            int cx = current[0];
-            int cy = current[1];
+        int[] current = stack.peek();
+        int cx = current[0];
+        int cy = current[1];
 
-            List<int[]> neighbors = getUnvisitedNeighbors(cx, cy);
+        List<int[]> neighbors = getUnvisitedNeighbors(cx, cy);
 
-            if (!neighbors.isEmpty()) {
-                int[] next = neighbors.get(rnd.nextInt(neighbors.size()));
-                int nx = next[0];
-                int ny = next[1];
+        if (!neighbors.isEmpty()) {
+            int[] next = neighbors.get(rnd.nextInt(neighbors.size()));
+            int nx = next[0];
+            int ny = next[1];
 
-                removeWall(cx, cy, nx, ny);
+            removeWall(cx, cy, nx, ny);
 
-                pole[nx][ny].setVisited(true);
-                stack.push(new int[]{nx, ny});
+            pole[nx][ny].setVisited(true);
+            stack.push(new int[]{nx, ny});
 
-            } else {
-                stack.pop(); // backtracking
-            }
+        } else {
+            stack.pop(); // backtracking
         }
     }
+    openMazeFromAllEdges();
+}
+
+    private void openMazeFromAllEdges() {
+        int middleCol = getCols() / 2;
+        int middleRow = getRows() / 2;
+
+        Wall.drill(pole[0][middleCol], 0);
+        Wall.drill(pole[getRows() - 1][middleCol], 2);
+        Wall.drill(pole[middleRow][0], 3);
+        Wall.drill(pole[middleRow][getCols() - 1], 1);
+    }
+
     List<int[]> getUnvisitedNeighbors(int x, int y) {
         List<int[]> list = new ArrayList<>();
 

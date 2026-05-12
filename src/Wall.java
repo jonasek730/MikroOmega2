@@ -49,6 +49,22 @@ public class Wall {
         this.permWall = permWall;
     }
 
+    public boolean isLeft() {
+        return left;
+    }
+
+    public boolean isRight() {
+        return right;
+    }
+
+    public boolean isUp() {
+        return up;
+    }
+
+    public boolean isDown() {
+        return down;
+    }
+
     public Wall(boolean isKey, boolean isEnd, boolean permWall) {
         this.isKey = isKey;
         this.isEnd = isEnd;

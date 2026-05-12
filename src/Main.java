@@ -10,8 +10,7 @@ public class Main {
         pole.printMaze();
 
         SwingUtilities.invokeLater(() -> {
-            UserInterface ui = new UserInterface(pole);
-            ui.setVisible(true);
+            new UserInterface(pole);
         });
     }
 }
