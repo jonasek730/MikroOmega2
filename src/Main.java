@@ -10,7 +10,7 @@ public class Main {
         pole.printMaze();
 
         SwingUtilities.invokeLater(() -> {
-            new UserInterface(pole);
+
         });
     }
 }
