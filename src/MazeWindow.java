@@ -36,6 +36,13 @@ public class MazeWindow extends JPanel {
                 int x = marginX + col * cellSize;
                 int y = marginY + row * cellSize;
 
+                if (cell.isPermWall()) {
+                    g.fillRect(x, y, cellSize, cellSize);
+                    continue;
+                }
+
+
+
                 if (!cell.isUp()) {
                     g.drawLine(x, y, x + cellSize, y);
                 }

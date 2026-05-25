@@ -9,7 +9,7 @@ public class Main {
         pole.BuidlMazeDFS(rnd);
         pole.printMaze();
 
-        SwingUtilities.invokeLater(() -> new UserInterface(new Random()));
+        SwingUtilities.invokeLater(Window::new);
     }
 
 }
