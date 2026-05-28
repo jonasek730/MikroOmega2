@@ -23,6 +23,7 @@ public class UserInterface extends JFrame {
         pole.BuidlMazeDFS(rnd);
         MazeWindow panel = new MazeWindow(pole);
         add(panel, BorderLayout.CENTER);
+        SwingUtilities.invokeLater(panel::requestFocusInWindow);
         startTimeMillis = System.currentTimeMillis();
         Timer timer = new Timer(1000, e -> updateTimer());
         timer.setInitialDelay(0);

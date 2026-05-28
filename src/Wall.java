@@ -64,6 +64,11 @@ public class Wall {
     public boolean isDown() {
         return down;
     }
+    public void setEnd(boolean end) {
+        isEnd = end;
+    }
+
+
 
     public Wall(boolean isKey, boolean isEnd, boolean permWall) {
         this.isKey = isKey;
