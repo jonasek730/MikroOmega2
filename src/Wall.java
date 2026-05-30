@@ -67,6 +67,10 @@ public class Wall {
     public void setEnd(boolean end) {
         isEnd = end;
     }
+    public void setKey(boolean key) {
+        isKey = key;
+    }
+
 
 
 

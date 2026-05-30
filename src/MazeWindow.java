@@ -2,7 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
-
+import java.util.Random;
 
 
 public class MazeWindow extends JPanel {
@@ -13,11 +13,13 @@ public class MazeWindow extends JPanel {
     private final Player player;
     private final int goalRow;
     private final int goalCol;
+    private boolean hasKey;
+    private final Runnable goalReachedAction;
     private boolean gameFinished;
 
 
 
-    public MazeWindow(Pole pole) {
+    public MazeWindow(Pole pole, Runnable goalReachedAction, Random rnd) {
         this.pole = pole;
         this.player = new Player(1, 1);
         setBackground(Color.BLACK);
@@ -27,9 +29,9 @@ public class MazeWindow extends JPanel {
         this.goalCol = cols / 2;
         this.gameFinished = false;
         pole.getCell(goalRow, goalCol).setEnd(true);
-
-
-
+        this.goalReachedAction = goalReachedAction;
+        this.hasKey = false;
+        placeRandomKey(rnd);
     }
     private void setupControls() {
         bindMovementKey("moveUp", KeyEvent.VK_UP, -1, 0);
@@ -81,24 +83,57 @@ public class MazeWindow extends JPanel {
     }
 
     private void movePlayer(int rowChange, int colChange) {
+        if (gameFinished) {
+            return;
+        }
+
         int nextRow = player.getRow() + rowChange;
         int nextCol = player.getCol() + colChange;
 
         if (canMoveTo(nextRow, nextCol, rowChange, colChange)) {
             player.moveTo(nextRow, nextCol);
+            checkKeyCollected();
             repaint();
             checkGoalReached();
         }
     }
-    private void checkGoalReached() {
-        if (player.getRow() == goalRow && player.getCol() == goalCol) {
-            gameFinished = true;
-            SwingUtilities.invokeLater(() -> {
-                JOptionPane.showMessageDialog(this, "Vyhral jsi! Dosel jsi do cile.");
-                System.exit(0);
-            });
+    private void checkKeyCollected() {
+        Wall currentCell = pole.getCell(player.getRow(), player.getCol());
+
+        if (currentCell.isKey()) {
+            hasKey = true;
+            currentCell.setKey(false);
         }
     }
+
+    private void checkGoalReached() {
+        if (hasKey && player.getRow() == goalRow && player.getCol() == goalCol) {
+            gameFinished = true;
+            SwingUtilities.invokeLater(goalReachedAction);
+        }
+    }
+    private void placeRandomKey(Random rnd) {
+        int keyRow;
+        int keyCol;
+
+        do {
+            keyRow = 1 + rnd.nextInt(rows - 2);
+            keyCol = 1 + rnd.nextInt(cols - 2);
+        } while (pole.getCell(keyRow, keyCol).isPermWall()
+                || isPlayerStart(keyRow, keyCol)
+                || isGoal(keyRow, keyCol));
+
+        pole.getCell(keyRow, keyCol).setKey(true);
+    }
+
+    private boolean isPlayerStart(int row, int col) {
+        return row == player.getRow() && col == player.getCol();
+    }
+
+    private boolean isGoal(int row, int col) {
+        return row == goalRow && col == goalCol;
+    }
+
 
 
 
@@ -154,8 +189,10 @@ public class MazeWindow extends JPanel {
                 }
             }
         }
-        drawPlayer(g, marginX, marginY);
         drawGoal(g, marginX, marginY);
+        drawKey(g, marginX, marginY);
+        drawPlayer(g, marginX, marginY);
+
     }
 private void drawGoal(Graphics g, int marginX, int marginY) {
     int goalX = marginX + goalCol * cellSize;
@@ -170,8 +207,27 @@ private void drawGoal(Graphics g, int marginX, int marginY) {
             cellSize - padding * 2
     );
 }
+    private void drawKey(Graphics g, int marginX, int marginY) {
+        int padding = 6;
 
+        g.setColor(Color.YELLOW);
 
+        for (int row = 1; row < rows - 1; row++) {
+            for (int col = 1; col < cols - 1; col++) {
+                if (pole.getCell(row, col).isKey()) {
+                    int keyX = marginX + col * cellSize;
+                    int keyY = marginY + row * cellSize;
+                    g.fillOval(
+                            keyX + padding,
+                            keyY + padding,
+                            cellSize - padding * 2,
+                            cellSize - padding * 2
+                    );
+                    return;
+                }
+            }
+        }
+    }
 private void drawPlayer(Graphics g, int marginX, int marginY) {
         int playerX = marginX + player.getCol() * cellSize;
         int playerY = marginY + player.getRow() * cellSize;

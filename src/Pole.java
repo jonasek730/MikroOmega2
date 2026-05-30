@@ -82,6 +82,61 @@ public void BuidlMazeDFS(Random rnd) {
         Wall.drill(pole[middleRow][0], 3);
         Wall.drill(pole[middleRow][getCols() - 1], 1);
     }
+    public void destroyRandomWalls(Random rnd, int wallCount) {
+        int destroyedWalls = 0;
+        int attempts = 0;
+        int maxAttempts = wallCount * 20;
+        int[][] directions = {
+                {-1, 0},
+                {1, 0},
+                {0, -1},
+                {0, 1}
+        };
+
+        while (destroyedWalls < wallCount && attempts < maxAttempts) {
+            attempts++;
+
+            int row = 1 + rnd.nextInt(getRows() - 2);
+            int col = 1 + rnd.nextInt(getCols() - 2);
+            int[] direction = directions[rnd.nextInt(directions.length)];
+            int nextRow = row + direction[0];
+            int nextCol = col + direction[1];
+
+            if (pole[nextRow][nextCol].isPermWall()) {
+                continue;
+            }
+
+            if (!hasWallBetween(row, col, nextRow, nextCol)) {
+                continue;
+            }
+
+            removeWall(row, col, nextRow, nextCol);
+            destroyedWalls++;
+        }
+    }
+
+    private boolean hasWallBetween(int row, int col, int nextRow, int nextCol) {
+        Wall cell = pole[row][col];
+
+        if (nextRow == row - 1 && nextCol == col) {
+            return !cell.isUp();
+        }
+
+        if (nextRow == row + 1 && nextCol == col) {
+            return !cell.isDown();
+        }
+
+        if (nextRow == row && nextCol == col - 1) {
+            return !cell.isLeft();
+        }
+
+        if (nextRow == row && nextCol == col + 1) {
+            return !cell.isRight();
+        }
+
+        return false;
+    }
+
 
     List<int[]> getUnvisitedNeighbors(int x, int y) {
         List<int[]> list = new ArrayList<>();
