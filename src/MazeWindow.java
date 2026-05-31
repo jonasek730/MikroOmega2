@@ -6,19 +6,24 @@ import java.util.Random;
 
 
 public class MazeWindow extends JPanel {
-    private final int cols = 50;
-    private final int rows = 30;
+    private int cols = 50;
+    private int rows = 28;
     private Pole pole;
-    private final int cellSize = 20;
-    private final Player player;
-    private final int goalRow;
-    private final int goalCol;
+    private int cellSize = 20;
+    private Player player;
+    private int goalRow;
+    private int goalCol;
     private boolean hasKey;
-    private final Runnable goalReachedAction;
+    private Runnable goalReachedAction;
     private boolean gameFinished;
 
 
-
+    /**
+     * Maze panel. Generate start,player,key,end
+     * @param pole Maze for painting
+     * @param goalReachedAction
+     * @param rnd random for placing key
+     */
     public MazeWindow(Pole pole, Runnable goalReachedAction, Random rnd) {
         this.pole = pole;
         this.player = new Player(1, 1);
@@ -33,12 +38,24 @@ public class MazeWindow extends JPanel {
         this.hasKey = false;
         placeRandomKey(rnd);
     }
+
+    /**
+     * set up keyboard for playing
+     */
     private void setupControls() {
         bindMovementKey("moveUp", KeyEvent.VK_UP, -1, 0);
         bindMovementKey("moveDown", KeyEvent.VK_DOWN, 1, 0);
         bindMovementKey("moveLeft", KeyEvent.VK_LEFT, 0, -1);
         bindMovementKey("moveRight", KeyEvent.VK_RIGHT, 0, 1);
     }
+
+    /**
+     * conect controls to the calling movePlayer metod
+     * @param actionName action from the previous metod
+     * @param keyCode
+     * @param rowChange for moving player
+     * @param colChange for moving player
+     */
     private void bindMovementKey(String actionName, int keyCode, int rowChange, int colChange) {
         getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(keyCode, 0), actionName);
         getActionMap().put(actionName, new AbstractAction() {
@@ -48,6 +65,15 @@ public class MazeWindow extends JPanel {
             }
         });
     }
+
+    /**
+     * control if the player can move
+     * @param nextRow place to move
+     * @param nextCol place to move
+     * @param rowChange from where
+     * @param colChange from where
+     * @return if can
+     */
     private boolean canMoveTo(int nextRow, int nextCol, int rowChange, int colChange) {
         if (nextRow < 1 || nextRow >= rows - 1) {
             return false;
@@ -82,6 +108,11 @@ public class MazeWindow extends JPanel {
         return false;
     }
 
+    /**
+     * move player repaint the panel
+     * @param rowChange new place
+     * @param colChange new place
+     */
     private void movePlayer(int rowChange, int colChange) {
         if (gameFinished) {
             return;
@@ -97,6 +128,10 @@ public class MazeWindow extends JPanel {
             checkGoalReached();
         }
     }
+
+    /**
+     * check if key is colected for the end
+     */
     private void checkKeyCollected() {
         Wall currentCell = pole.getCell(player.getRow(), player.getCol());
 
@@ -106,12 +141,20 @@ public class MazeWindow extends JPanel {
         }
     }
 
+    /**
+     * check is player is on the end
+     */
     private void checkGoalReached() {
         if (hasKey && player.getRow() == goalRow && player.getCol() == goalCol) {
             gameFinished = true;
             SwingUtilities.invokeLater(goalReachedAction);
         }
     }
+
+    /**
+     * place key random in the map
+     * @param rnd random placemet of the key
+     */
     private void placeRandomKey(Random rnd) {
         int keyRow;
         int keyCol;
@@ -126,17 +169,30 @@ public class MazeWindow extends JPanel {
         pole.getCell(keyRow, keyCol).setKey(true);
     }
 
+    /**
+     * true if player starts at starting position
+     * @param row position
+     * @param col position
+     * @return
+     */
     private boolean isPlayerStart(int row, int col) {
         return row == player.getRow() && col == player.getCol();
     }
 
+    /**
+     * return true if player is at the end position
+     * @param row position
+     * @param col position
+     * @return
+     */
     private boolean isGoal(int row, int col) {
         return row == goalRow && col == goalCol;
     }
 
 
-
-
+    /**
+     * paint the whole maze and center it
+     */
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -149,7 +205,7 @@ public class MazeWindow extends JPanel {
         int marginX = (getWidth() - gridWidth) / 2;
         int marginY = (getHeight() - gridHeight) / 2;
 
-        g.setColor(Color.WHITE);
+        g.setColor(Color.BLUE);
 
         for (int row = 0; row < rows; row++) {
             for (int col = 0; col < cols; col++) {
@@ -170,19 +226,16 @@ public class MazeWindow extends JPanel {
                     g.drawLine(x, y, x + cellSize, y);
                 }
 
-                // pravá zeď
                 if (!cell.isRight()) {
                     g.drawLine(x + cellSize, y,
                             x + cellSize, y + cellSize);
                 }
 
-                // dolní zeď
                 if (!cell.isDown()) {
                     g.drawLine(x, y + cellSize,
                             x + cellSize, y + cellSize);
                 }
 
-                // levá zeď
                 if (!cell.isLeft()) {
                     g.drawLine(x, y,
                             x, y + cellSize);
@@ -194,7 +247,14 @@ public class MazeWindow extends JPanel {
         drawPlayer(g, marginX, marginY);
 
     }
-private void drawGoal(Graphics g, int marginX, int marginY) {
+
+    /**
+     * paint the end
+     * @param g
+     * @param marginX
+     * @param marginY
+     */
+    private void drawGoal(Graphics g, int marginX, int marginY) {
     int goalX = marginX + goalCol * cellSize;
     int goalY = marginY + goalRow * cellSize;
     int padding = 5;
@@ -207,6 +267,13 @@ private void drawGoal(Graphics g, int marginX, int marginY) {
             cellSize - padding * 2
     );
 }
+
+    /**
+     * paint the key
+     * @param g
+     * @param marginX
+     * @param marginY
+     */
     private void drawKey(Graphics g, int marginX, int marginY) {
         int padding = 6;
 
@@ -228,7 +295,14 @@ private void drawGoal(Graphics g, int marginX, int marginY) {
             }
         }
     }
-private void drawPlayer(Graphics g, int marginX, int marginY) {
+
+    /**
+     * paint the player
+     * @param g
+     * @param marginX
+     * @param marginY
+     */
+    private void drawPlayer(Graphics g, int marginX, int marginY) {
         int playerX = marginX + player.getCol() * cellSize;
         int playerY = marginY + player.getRow() * cellSize;
         int padding = 4;

@@ -7,7 +7,7 @@ public class Main {
         Random rnd = new Random();
         pole.createMaze();
         pole.BuidlMazeDFS(rnd);
-        pole.printMaze();
+
 
         SwingUtilities.invokeLater(Window::new);
     }

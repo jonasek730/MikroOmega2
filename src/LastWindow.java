@@ -2,14 +2,22 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.Random;
 
-public class LastWindow extends JFrame {
+import static java.awt.Color.*;
 
+/**
+ * class for the last window
+ */
+public class LastWindow extends JFrame {
+    /**
+     * Paint the last window
+     * @param playedTime Players score
+     */
         public LastWindow(String playedTime) {
             setTitle("Konec hry");
             setSize(700, 450);
             setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             setLocationRelativeTo(null);
-            getContentPane().setBackground(Color.BLACK);
+            getContentPane().setBackground(BLACK);
             setLayout(new GridBagLayout());
 
             JPanel contentPanel = new JPanel();
@@ -18,12 +26,12 @@ public class LastWindow extends JFrame {
 
             JLabel titleLabel = new JLabel("Vyhral jsi!");
             titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-            titleLabel.setForeground(Color.WHITE);
+            titleLabel.setForeground(WHITE);
             titleLabel.setFont(new Font("SansSerif", Font.BOLD, 54));
 
             JLabel timeLabel = new JLabel("Hral jsi: " + playedTime);
             timeLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-            timeLabel.setForeground(Color.WHITE);
+            timeLabel.setForeground(WHITE);
             timeLabel.setFont(new Font("SansSerif", Font.BOLD, 30));
 
             JButton resetButton = new JButton("Reset");
@@ -51,7 +59,7 @@ public class LastWindow extends JFrame {
         endButton.setFont(new Font("SansSerif", Font.BOLD, 30));
         endButton.setPreferredSize(new Dimension(240, 80));
         endButton.setMaximumSize(new Dimension(240, 80));
-        endButton.setFocusPainted(false);
+        resetButton.setFocusPainted(false);
         endButton.addActionListener(e -> System.exit(0));
 
         contentPanel.add(titleLabel);

@@ -3,6 +3,9 @@ import java.awt.*;
 import java.util.Random;
 
 public class Window extends JFrame {
+    /**
+     * create the welcome window
+     */
     public Window() {
         setTitle("Maze Runner");
         setSize(700, 450);
@@ -19,6 +22,12 @@ public class Window extends JFrame {
         titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         titleLabel.setForeground(Color.WHITE);
         titleLabel.setFont(new Font("SansSerif", Font.BOLD, 54));
+        String welcomeText = "Vítej v mojí hře.\n Cíl hry je najít klíč zobrazený žlutě a dojít do cíle\n Pohyb je umožněn šipkamy.";
+
+        JLabel welcomeLabel = new JLabel("<html><div style='text-align: center;'>" + welcomeText + "</div></html>");
+        welcomeLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        welcomeLabel.setForeground(Color.WHITE);
+        welcomeLabel.setFont(new Font("SansSerif", Font.PLAIN, 24));
 
         JButton startButton = new JButton("Start");
         startButton.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -32,6 +41,8 @@ public class Window extends JFrame {
         });
 
         contentPanel.add(titleLabel);
+        contentPanel.add(Box.createRigidArea(new Dimension(0, 20)));
+        contentPanel.add(welcomeLabel);
         contentPanel.add(Box.createRigidArea(new Dimension(0, 30)));
         contentPanel.add(startButton);
 

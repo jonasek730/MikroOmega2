@@ -8,7 +8,10 @@ public class UserInterface extends JFrame {
     private static final int EXTRA_OPEN_WALLS = 300;
     private final Timer timer;
 
-
+    /**
+     * create the main window set the timer
+     * @param rnd
+     */
     public UserInterface(Random rnd) {
         setTitle("MikroOmega");
         setSize(1200, 800);
@@ -35,10 +38,17 @@ public class UserInterface extends JFrame {
         timer.start();
 
     }
+
+    /**
+     * timer
+     */
     private void updateTimer() {
         timerLabel.setText("Time: " + formatPlayedTime(getElapsedMillis()));
     }
 
+    /**
+     * stop the timer when end
+     */
     private void finishGame() {
         timer.stop();
         String playedTime = formatPlayedTime(getElapsedMillis());
@@ -46,10 +56,19 @@ public class UserInterface extends JFrame {
         new LastWindow(playedTime);
     }
 
+    /**
+     * return the number of miliseconds
+     * @return
+     */
     private long getElapsedMillis() {
         return System.currentTimeMillis() - startTimeMillis;
     }
 
+    /**
+     * do the right format of the minutes and seconds
+     * @param elapsedMillis lenght of the game
+     * @return the new timer
+     */
     private String formatPlayedTime(long elapsedMillis) {
 
         long elapsedSeconds = elapsedMillis / 1000;

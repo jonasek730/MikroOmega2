@@ -13,10 +13,6 @@ public class Wall {
         return isKey;
     }
 
-    public boolean isEnd() {
-        return isEnd;
-    }
-
     public void setVisited(boolean visited) {
         this.visited = visited;
     }
@@ -85,6 +81,12 @@ public class Wall {
         this.visited=false;
 
     }
+
+    /**
+     * dril in the direction
+     * @param e
+     * @param c
+     */
     public static void drill(Wall e,int c){
 
         if(c==0){

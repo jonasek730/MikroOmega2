@@ -1,13 +1,10 @@
 import java.util.*;
 
 public class Pole {
-   private Wall[][] pole =new Wall[30][50];
+   private Wall[][] pole =new Wall[28][50];
 
-
-
-    public void setPole(Wall[][] pole) {
-        this.pole = pole;
-    }
+    /**
+     * create a pole and set perm wall     */
     public void createMaze(){
         for (int i = 0; i < pole.length; i++) {
             for (int j = 0; j < pole[i].length; j++) {
@@ -23,25 +20,11 @@ public class Pole {
 
     }
 
-    public boolean printMaze(){
-        for (int i = 0; i < pole.length; i++) {
-            StringBuilder row = new StringBuilder();
-            for (int j = 0; j < pole[i].length; j++) {
-                if (pole[i][j] != null && pole[i][j].isPermWall()) {
-
-                    row.append(" # ");
-                }
-                //Todo vyobrazeni
-                if (pole[i][j]!=null&&!pole[i][j].isPermWall()){
-                    row.append("(_)");
-                }
-            }
-
-            System.out.println(row);
-        }
-        return true;
-    }
-public void BuidlMazeDFS(Random rnd) {
+    /**
+     * create a walls and the whole maze
+     * @param rnd
+     */
+    public void BuidlMazeDFS(Random rnd) {
     Stack<int[]> stack = new Stack<>();
     int x = pole.length / 2;
     int y = pole[0].length / 2;
@@ -67,12 +50,15 @@ public void BuidlMazeDFS(Random rnd) {
             stack.push(new int[]{nx, ny});
 
         } else {
-            stack.pop(); // backtracking
+            stack.pop();
         }
     }
     openMazeFromAllEdges();
 }
 
+    /**
+     * open one direction in the maze
+     */
     private void openMazeFromAllEdges() {
         int middleCol = getCols() / 2;
         int middleRow = getRows() / 2;
@@ -82,6 +68,12 @@ public void BuidlMazeDFS(Random rnd) {
         Wall.drill(pole[middleRow][0], 3);
         Wall.drill(pole[middleRow][getCols() - 1], 1);
     }
+
+    /**
+     * make the maze easier by destroing walls
+     * @param rnd
+     * @param wallCount number of the walls
+     */
     public void destroyRandomWalls(Random rnd, int wallCount) {
         int destroyedWalls = 0;
         int attempts = 0;
@@ -115,6 +107,9 @@ public void BuidlMazeDFS(Random rnd) {
         }
     }
 
+    /**
+     * control if there is a wall between two places
+     */
     private boolean hasWallBetween(int row, int col, int nextRow, int nextCol) {
         Wall cell = pole[row][col];
 
@@ -137,7 +132,12 @@ public void BuidlMazeDFS(Random rnd) {
         return false;
     }
 
-
+    /**
+     * check for the unvisited directions
+     * @param x
+     * @param y
+     * @return the list of unvisited
+     */
     List<int[]> getUnvisitedNeighbors(int x, int y) {
         List<int[]> list = new ArrayList<>();
 
@@ -148,6 +148,14 @@ public void BuidlMazeDFS(Random rnd) {
 
         return list;
     }
+
+    /**
+     * remove wall from the direction
+     * @param x
+     * @param y
+     * @param nx
+     * @param ny
+     */
     void removeWall(int x, int y, int nx, int ny) {
         if (nx == x - 1 && ny == y) {
             Wall.drill(pole[x][y], 0);
